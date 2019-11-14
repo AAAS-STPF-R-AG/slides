@@ -1,0 +1,23 @@
+To Do before 11-18-2019
+================
+
+## Pre-Meeting Assignment
+
+1.  Install / Update R. Choose your operating system
+    [here](https://cloud.r-project.org/).
+2.  (Optional, but very helpful) Install / Update RStudio. Choose your
+    operating system
+    [here](https://rstudio.com/products/rstudio/download/#download).
+
+If you cannot complete these steps prior to the meeting, please
+[arrive](https://library.arlingtonva.us/locations/central-library/) by
+5:45pm.
+
+Mac users, if you are choosing to install R & RStudio with Homebrew, you
+are on your own. I (Sam) have tried to do this many times, but it has
+never been a better solution for me than downloading & using the
+installers from the web.
+
+Linux users, if you have troubles, I am sorry, but I (Sam) cannot help
+you. But, given that you are already Linux users, you can probably help
+yourselves. 😜

@@ -1,0 +1,68 @@
+---
+title: "a quick intRo:"
+subtitle: "flying fast n' loose"
+author: "Sam Tyner, Amanda Price"
+institute: "AAAS STPF R Users Affinity Group"
+date: "2019/11/18"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include = FALSE}
+library(xaringanthemer)
+mono_light(
+  base_color = "#072b50",
+  text_color = "#444a5a",
+  header_font_google = google_font("PT Serif"),
+  text_font_google   = google_font("Roboto", "300", "300i"),
+  code_font_google   = google_font("Droid Mono"), 
+  link_color = "#0288ee"
+)
+```
+
+```{r to_compile_slides, echo = FALSE, eval = FALSE}
+# to build the slide deck, run these lines first: 
+install.packages(c("knitr", "rmarkdown"))
+remotes::install_github('yihui/xaringan')
+devtools::install_github("gadenbuie/xaringanthemer")
+# then click "Knit" or type Ctrl + Shift + K or Cmd + Shift +K
+```
+
+# Outline 
+
+1. Using R: R GUI, RStudio IDE, Terminal
+2. Types of R Data
+3. Functions & loops
+4. Reading data into R 
+5. Libraries 
+
+---
+class: inverse, middle, center
+# Using R 
+
+---
+class: inverse, middle, center
+# R Data Types 
+
+---
+class: inverse, middle, center
+# Functions & loops 
+
+---
+class: inverse, middle, center
+# Reading data into R 
+
+---
+class: inverse, middle, center
+# Libraries 
