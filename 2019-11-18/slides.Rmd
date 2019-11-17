@@ -1,6 +1,5 @@
 ---
-title: "a quick intRo:"
-subtitle: "flying fast n' loose"
+title: "a quick intRo"
 author: "Sam Tyner, Amanda Price"
 institute: "AAAS STPF R Users Affinity Group"
 date: "2019/11/18"
@@ -45,8 +44,9 @@ devtools::install_github("gadenbuie/xaringanthemer")
 1. Using R: R GUI, Terminal, RStudio IDE
 2. R Data Types & Structures
 3. Functions & loops
-4. Reading data into R 
-5. Libraries 
+4. R Packages
+5. Reading data into R 
+
 
 ---
 class: inverse, middle, center
@@ -310,9 +310,175 @@ while (i < 10){
 
 ---
 class: inverse, middle, center
-# Libraries 
+# Packages `r emo::ji("package")` `r emo::ji("package")` `r emo::ji("package")`
+
+---
+# What is an R `r emo::ji("package")`?
+
+- A collection of additional R functions for a specific purpose. 
+
+Examples: 
+
+- `ggplot2` for creating data visualizations 
+- `lme4` for fitting linear, generalized linear, and nonlinear mixed models 
+- `dplyr` for "tidy" data manipulation
+- `tidyr` for tidying data 
+- `devtools` for creating R packages 
+
+
+---
+# Installing a package 
+
+Before you can use a package, you need to install it: 
+
+```{r install, eval=FALSE}
+# from CRAN
+install.packages(c("ggplot2", "lme4", "dplyr", "tidyr", "devtools"))
+# from Github
+devtools::install_github("tidyverse/ggplot2")
+```
+
+---
+# Using a package 
+
+Two ways: 
+
+- Attach it to the workspace with `library()`: 
+
+```{r, eval=FALSE}
+library(ggplot2)
+```
+
+- Call the functions out of the package with `::`: 
+
+```{r}
+dplyr::filter(mtcars, mpg < 15)
+```
+
+---
+# Finding R packages to use
+
+- CRAN task views: Collections of packages for types of tasks
+    * [Time series](https://cran.r-project.org/web/views/TimeSeries.html)
+    * [Social sciences](https://cran.r-project.org/web/views/SocialSciences.html)
+    * [Econometrics](https://cran.r-project.org/web/views/Econometrics.html) 
+    * [Chemometrics and Computational Physics](https://cran.r-project.org/web/views/ChemPhys.html)
+    * [Many more!](https://cran.r-project.org/web/views/)
+
 
 ---
 class: inverse, middle, center
 # Reading data into R 
 
+---
+# Base R 
+
+- `read.csv()`: reads in comma-separatd value files
+- `read.table()`: reads in tab-delimited files 
+- `read.delim()`: reads in arbitrarily delimited files 
+- `readLines()`: reads in text files 
+- `readRDS()`: reads in R data files (RDS)
+
+---
+# Using other packages 
+
+The `readr` package: 
+- `read_csv()`, `read_delim()`, `read_rds()`, etc. 
+
+The `haven` package: 
+- `read_sas()`, `read_spss()`, `read_stata()`, etc.  
+
+The `readxl` package: 
+- `read_excel()`, `read_xls()`, etc.
+
+The `data.table` package: 
+- `fread()` 
+
+---
+# Examples 
+
+```{r message=FALSE}
+commute <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-11-05/commute.csv")
+head(commute)
+```
+
+---
+# Examples 
+
+```{r message=FALSE}
+iris <- haven::read_sas("dat/iris.sas7bdat")
+head(iris)
+```
+
+---
+# Some data cleaning 
+
+The `janitor` package cleans things up nicely: 
+
+```{r}
+janitor::clean_names(iris)
+```
+
+---
+# Some data cleaning 
+
+```{r bobross, message=FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+bob_ross <- read_rds("dat/bobross.rds")
+head(bob_ross)
+```
+
+---
+# Some data cleaning 
+
+```{r}
+bob_ross %>% 
+  gather(element, present, apple_frame:wood_framed)
+```
+
+---
+# Some data cleaning 
+
+```{r}
+bob_ross %>% 
+  gather(element, present, apple_frame:wood_framed) %>% 
+  mutate(present = as.logical(present)) 
+```
+
+---
+# Some data cleaning 
+
+```{r}
+bob_ross %>% 
+  gather(element, present, apple_frame:wood_framed) %>% 
+  mutate(present = as.logical(present)) %>% 
+  extract(episode, into = c("season", "ep_num"), 
+          regex = "S(.*)E(.*)")
+```
+
+---
+# Some data cleaning 
+
+```{r}
+bob_ross %>% 
+  gather(element, present, apple_frame:wood_framed) %>% 
+  mutate(present = as.logical(present)) %>% 
+  extract(episode, into = c("season", "ep_num"), 
+          regex = "S(.*)E(.*)") %>% 
+  mutate_at(1:2, parse_number)
+```
+
+---
+# Some data cleaning 
+
+```{r}
+bob_ross %>% 
+  gather(element, present, apple_frame:wood_framed) %>% 
+  mutate(present = as.logical(present)) %>% 
+  extract(episode, into = c("season", "ep_num"), 
+          regex = "S(.*)E(.*)") %>% 
+  mutate_at(1:2, parse_number) %>% 
+  arrange(season, ep_num)
+```
