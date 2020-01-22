@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.align = "center", warning = FALSE, fig.height = 3)
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center", warning = FALSE, fig.height = 4)
 ```
 
 ```{r xaringan-themer, include = FALSE}
@@ -88,16 +88,10 @@ tmaptools::geocode_OSM("McLean Metro")
 
 ```{r}
 bikeshare_latlon <- read.csv("data/bike_addresses_latlon.csv")
-bikeshare_latlon
+head(bikeshare_latlon)
 ```
 
-
---- 
-class: inverse, middle, center
-
-# Reading/Writing Spatial Data
-
---- 
+---
 ## Read in spatial data
 
 To read in spatial data, use the `st_read()` or `read_sf()` function from the `sf` package:
@@ -110,12 +104,8 @@ read_sf("data/dc_wards.shp") # if you like tidy data
 # Also reads URLs, try the same function with https://opendata.arcgis.com/datasets/a1f7acf65795451d89f0a38565a975b3_5.geojson
 ```
 
---- 
-## Take a look at the data structures
-
 ```{r}
 dc_wards <- read_sf("data/dc_wards.shp")
-dc_wards
 ```
 
 ---
@@ -170,6 +160,14 @@ plot(st_geometry(bikeshare_locations), add = TRUE)
 ```
 
 ---
+## Change the color 
+
+```{r}
+plot(st_geometry(dc_wards))
+plot(st_geometry(bikeshare_locations), add = TRUE, col = "red")
+```
+
+---
 ## Common issues: Projections and Coordinate Reference Systems
 
 If your map layers won't plot on top of each other, you need to check that they 
@@ -180,29 +178,29 @@ dc_wards_proj <- st_transform(dc_wards, 6654)
 ```
 
 ```{r}
-plot(dc_wards_proj)
-plot(bikeshare_locations, add = TRUE)
+plot(st_geometry(dc_wards_proj))
+plot(st_geometry(bikeshare_locations), add = TRUE)
 ```
 
 ---
 ## Check the projection
 
+These aren't the same!
+
 ```{r}
 st_crs(dc_wards_proj)
 st_crs(bikeshare_locations)
-st_transform(bikeshare_locations, st_crs(dc_wards_proj))
 ```
 
 ---
-## Change the color 
+## Project the data 
 
-```{r}
-plot(st_geometry(dc_wards))
-plot(st_geometry(bikeshare_locations), add = TRUE, col = "red", pch = )
+```{r eval=FALSE}
+bikeshare_locations <- st_transform(bikeshare_locations, 6654)
 ```
 
 ---
-## Other options
+## Other R map package options
 
 ```{r}
 library(tmap)
@@ -238,7 +236,6 @@ tm_shape(dc_wards) +
 ```
 
 ---
-## Change back to static mapping, and add a layer
 ```{r}
 tmap_mode("plot")
 
@@ -250,15 +247,15 @@ tm_shape(dc_wards) +
 ```
 
 ---
-## Much more complicated maps possible
+## More complicated maps possible
 
 ```{r}
 tmap_mode("plot")
 
 tm_shape(dc_wards) +
-  tm_polygons() +
+  tm_polygons("POP_2000") +
   tm_shape(bikeshare_locations) +
-  tm_dots(size = 0.1)
+  tm_dots(size = 0.1) 
 
 ```
 
@@ -271,13 +268,6 @@ More on this at "[Drawing beautiful maps programmatically with R, sf and ggplot2
 library(ggplot2)
 ggplot(data = dc_wards) +
   geom_sf()
-```
-
----
-## tmap is great with rasters though
-
-```{r}
-
 ```
 
 ---
@@ -302,14 +292,10 @@ class: inverse
 ## Crop locations to DC Wards
 
 ```{r}
-st_intersection(bikeshare_locations, dc_wards)
-```
+bikes_in_dc <- st_intersection(bikeshare_locations, dc_wards)
 
----
-## Different from the following...
-
-```{r}
-st_intersection(dc_wards, bikeshare_locations)
+plot(st_geometry(dc_wards))
+plot(st_geometry(bikes_in_dc), col = "red", add = TRUE)
 ```
 
 ---
